@@ -150,9 +150,6 @@ void ReadCarAndPipe() {
   ofstream fifo_file;
   fifo_file.open(path);
 
-  //setlinebuf(stdout);
-  //unlink(path.c_str());
-  //mkfifo(path.c_str(),S_IRWXU | S_IRWXG | S_IRWXO);
   file.open(car);
 
   string line; getline(file,line ); //this is for csv signature
@@ -178,7 +175,7 @@ void ReadCarAndPipe() {
       car_id_to_car_struct[car_id].directionArray.push_back(result[9]);
       car_id_to_car_struct[car_id].pointArray.push_back(coordinate_pair);
       //mobile id exists no need to insert
-      //cout<<"inside"<<endl;
+
     }
     else { //car does not exist in the dict - insert it
       st_car_point carpoint;
@@ -204,17 +201,9 @@ void ReadCarAndPipe() {
       <<car_map.second.directionArray[i] //direction
       <<'\n';
     }
-    //fifocar.second.mobile_id
   }
   //send all the data here
-  /*
-   float a = 40.34;
-   float b = 34.34;
-   int c = 4234234;
-   for (int i = 0; i < 3; i++) {
-   fifo_file <<a<<b<<c<<'\n';
-   }
-   */
+
   fifo_file <<"done"<<'\n';
   fifo_file.close();
 
@@ -339,10 +328,6 @@ void ReadGPSAndCalculate() {
               distanceMap[2] = make_pair(mappoint,dist2);
             }
           }
-          //cout<<"prev point size:"<<coord_to_loc_struct[mappoint].previous_point.size()<<endl;
-          //for each prev point, we can calculate line distance as well but of course there won't be previous for
-          //all points
-          //float dist = haversine(generatedcarpoints[j], mappoint); //we wanna do it for all the three points in a pipeline
         }
       }
       coordinatetype coord;
@@ -350,19 +335,15 @@ void ReadGPSAndCalculate() {
         if(distanceMap[0].first == distanceMap[1].first ) { //all the points are aligned
         	//coords[car_id].push_back(distanceMap[0].first);
         	coord = distanceMap[0].first;
-        	//car_id.second.route.push_back(distanceMap[0].first);
         }
         else if(distanceMap[0].first == distanceMap[2].first){
-          //calculatedRoute[car_id].push_back(distanceMap[0].first);
         	coord = distanceMap[0].first;
         }
         else if(distanceMap[1].first == distanceMap[2].first){
-          //calculatedRoute[car_id].push_back(distanceMap[1].first);
       	coord = distanceMap[1].first;
 
         }
         else {
-          //calculatedRoute[car_id].push_back(distanceMap[1].first);
         	coord = distanceMap[1].first;
 
         }

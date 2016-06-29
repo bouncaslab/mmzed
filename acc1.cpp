@@ -17,7 +17,6 @@ void distancetolinefrompoint(float arr1[10], float dist[3]) {
 	float arr[10];
 #pragma HLS ARRAY_PARTITION variable=arr dim=1 complete
 
-//#pragma HLS ARRAY_PARTITION variable=arr cyclic factor=8 dim=1
 	float distoutA[3];
 #pragma HLS ARRAY_PARTITION variable=distoutA dim=1 complete
 
@@ -26,8 +25,6 @@ void distancetolinefrompoint(float arr1[10], float dist[3]) {
 
 	float distoutC[3];
 #pragma HLS ARRAY_PARTITION variable=distoutC dim=1 complete
-
-	//auto start = std::chrono::system_clock::now();
 
 	for (int i = 0; i < 10; i++) {
 #pragma HLS PIPELINE
@@ -54,10 +51,7 @@ void distancetolinefrompoint(float arr1[10], float dist[3]) {
 #pragma HLS PIPELINE
 		distoutC[i] = distoutA[i]/distoutB[i];
 	}
-	//auto stop = std::chrono::system_clock::now();
-	//std::chrono::duration<float, std::micro>
-	//time = stop - start;
-	//cout << time.count() << "  ms for distance"<<endl;
+
 	for (int i = 0; i < 3; i++) {
 #pragma HLS PIPELINE
 		dist[i] = distoutC[i];
@@ -92,24 +86,19 @@ void distancetopointfrompoint(float arr1[8], float dist[3]) {
 }
 
 void haversine(float arr1[8], float dist1[3]) {
-//#pragma HLS PIPELINE
 	float arr[8];
 #pragma HLS ARRAY_PARTITION variable=arr dim=1 complete
 
-//#pragma HLS ARRAY_PARTITION variable=arr cyclic factor=10 dim=1
 	float distout[3];
 #pragma HLS ARRAY_PARTITION variable=distout dim=1 complete
 
-//#pragma HLS ARRAY_PARTITION variable=distout cyclic factor=4 dim=1
 
 	for (int i = 0; i < 8; i++) {
 #pragma HLS PIPELINE
 		arr[i] = arr1[i]* PI / 180;
 	}
-//#pragma HLS PIPELINE
 
-	//auto start = std::chrono::system_clock::now();
-	//call your function here
+
 	float lat2 = arr[6] * PI / 180;
 	float lon2 = arr[7] * PI / 180;
 
@@ -123,12 +112,7 @@ void haversine(float arr1[8], float dist1[3]) {
 				+ (cosf(lat1) * cosf(lat2) * sinf(dlon) * sinf(dlon));
 		float c = 2 * atan2f(sqrtf(a), sqrtf(1 - a));
 		distout[i] = R * c;
-	} //where R is the radius of the Earth
-	  //auto stop = std::chrono::system_clock::now();
-	  //std::chrono::duration<float, std::milli>
-	  //time = stop - start;
-	  //cout << fixed << setprecision(6)
-	  //<< time.count() << "  ms for havesine"<<endl;
+	}
 	for (int i = 0; i < 3; i++) {
 #pragma HLS PIPELINE
 		dist1[i] = distout[i];
